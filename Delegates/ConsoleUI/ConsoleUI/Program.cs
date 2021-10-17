@@ -5,15 +5,22 @@ namespace ConsoleUI
 {
     class Program
     {
-        private static ShoppingCartModel _cart;
+        private static ShoppingCartModel _cart = new ShoppingCartModel();
+
+        
         static void Main(string[] args)
         {
             PopulateCartWithDemoData();
 
-            Console.WriteLine($"The total for the cart is {_cart.GenerateTotal():C2}");
+            Console.WriteLine($"The Discounted total for the cart is {_cart.GenerateTotal(ShowTotalBeforeDiscount):C2}");
             Console.WriteLine("Please press any key to exit the application");
             Console.ReadKey();
 
+        }
+
+        private static void ShowTotalBeforeDiscount(decimal total)
+        {
+            Console.WriteLine($"Total before discount: {total:C2}");
         }
 
         private static void PopulateCartWithDemoData()

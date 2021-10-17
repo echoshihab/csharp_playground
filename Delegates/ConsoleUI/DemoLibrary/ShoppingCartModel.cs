@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http.Headers;
 
@@ -8,12 +9,15 @@ namespace DemoLibrary
     public class ShoppingCartModel
     {
 
+        public delegate void DisplayTotalBeforeDiscount(decimal total);
 
-        public List<ProductModel> Items { get; set; } 
+        public List<ProductModel> Items { get; set; } = new List<ProductModel>();
 
-        public decimal GenerateTotal()
+        public decimal GenerateTotal(DisplayTotalBeforeDiscount displayTotalBeforeDiscount)
         {
             decimal subTotal = Items.Sum(x => x.Price);
+
+            displayTotalBeforeDiscount(subTotal);
 
             return subTotal switch
             {
