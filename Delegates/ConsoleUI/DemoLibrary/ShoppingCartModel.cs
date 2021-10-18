@@ -13,19 +13,14 @@ namespace DemoLibrary
 
         public List<ProductModel> Items { get; set; } = new List<ProductModel>();
 
-        public decimal GenerateTotal(DisplayTotalBeforeDiscount displayTotalBeforeDiscount)
+        public decimal GenerateTotal(DisplayTotalBeforeDiscount displayTotalBeforeDiscount, Func<List<ProductModel>, decimal, decimal> calculateDiscountedTotal)
         {
             decimal subTotal = Items.Sum(x => x.Price);
 
             displayTotalBeforeDiscount(subTotal);
 
-            return subTotal switch
-            {
-                > 100 => subTotal * 0.80M,
-                > 50 => subTotal * 0.85M,
-                > 10 => subTotal * 0.90M,
-                _ => subTotal
-            };
+            return calculateDiscountedTotal(Items, subTotal);
+         
         }
     }
 }
