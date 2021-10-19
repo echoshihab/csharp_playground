@@ -13,14 +13,18 @@ namespace DemoLibrary
 
         public List<ProductModel> Items { get; set; } = new List<ProductModel>();
 
-        public decimal GenerateTotal(DisplayTotalBeforeDiscount displayTotalBeforeDiscount, Func<List<ProductModel>, decimal, decimal> calculateDiscountedTotal)
+        public decimal GenerateTotal(DisplayTotalBeforeDiscount displayTotalBeforeDiscount, Func<List<ProductModel>, decimal, decimal> calculateDiscountedTotal,
+            Action<string> signalMethodExecution)
         {
             decimal subTotal = Items.Sum(x => x.Price);
 
             displayTotalBeforeDiscount(subTotal);
 
+            signalMethodExecution("Generate total method is now executing");
             return calculateDiscountedTotal(Items, subTotal);
-         
+
         }
+
+
     }
 }

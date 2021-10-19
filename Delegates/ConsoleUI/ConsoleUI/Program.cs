@@ -13,10 +13,15 @@ namespace ConsoleUI
         {
             PopulateCartWithDemoData();
 
-            Console.WriteLine($"The Discounted total for the cart is {_cart.GenerateTotal(ShowTotalBeforeDiscount, CalculateDiscount):C2}");
+            Console.WriteLine($"The Discounted total for the cart is {_cart.GenerateTotal(ShowTotalBeforeDiscount, CalculateDiscount, AlertMethodCompletion):C2}");
             Console.WriteLine("Please press any key to exit the application");
             Console.ReadKey();
 
+        }
+
+        private static void AlertMethodCompletion(string message)
+        {
+            Console.WriteLine(message);
         }
 
         //this just has to match the method signature of delegate method declared in shopping cart model
