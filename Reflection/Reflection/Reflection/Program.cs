@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 
 namespace Reflection
@@ -17,7 +18,11 @@ namespace Reflection
             StudentDto studentDto = new StudentDto()
             {
                 StudentId = 1,
-                StudentName = "Test"
+                StudentName = "Test",
+                Courses = new List<string>()
+                {
+                    "Math", "Science"
+                }
             };
 
             StudentDb studentDb = new StudentDb();
