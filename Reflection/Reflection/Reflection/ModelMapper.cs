@@ -31,7 +31,7 @@ namespace Reflection
     {
         
         //TODO: Map one model to another model of by same name
-        public void ModelToDomainMap<TModel, TDomain>(TModel model) where TModel: class, new() where TDomain: class, new()
+        public TDomain ModelToDomainMap<TModel, TDomain>(TModel model) where TModel: class, new() where TDomain: class, new()
         {
             //initiate a new domain class
             TDomain domain = new TDomain(); 
@@ -57,13 +57,19 @@ namespace Reflection
                         {
                             if (typeof(IEnumerable).IsAssignableFrom(domainPropType) &&
                                 typeof(IEnumerable).IsAssignableFrom(modelPropType) &&
-                                (modelPropType.GetGenericArguments()[0] == domainPropType.GetGenericArguments()[0]))
+                                (modelPropType.GetGenericArguments()[0] == domainPropType.GetGenericArguments()[0])
+                                && (modelPropType.GetGenericTypeDefinition() == domainPropType.GetGenericTypeDefinition()))
                             {
-                                var internalType = modelPropType.GetGenericArguments()[0];
-                                var genericType = modelPropType.GetGenericTypeDefinition();
+                                var listType = typeof(List<>);
+                                var constructed = listType.MakeGenericType(modelPropType.GetGenericArguments()[0]);
+                                var constructedInstance = (IList) Activator.CreateInstance(constructed);
 
-                                Console.WriteLine(internalType);
-                                Console.WriteLine(genericType);
+                                IEnumerable modelValues = (IEnumerable) modelProp.GetValue(model);
+                                foreach (var value in modelValues)
+                                {
+                                    constructedInstance.Add(value);
+                                }
+                                domainProp.SetValue(domain, constructedInstance);
 
 
                             }
@@ -72,7 +78,9 @@ namespace Reflection
                                 throw new Exception("Type definition of Generic must be the same");
                             }
                         }
+
                         
+
                     }
 
 
@@ -86,10 +94,10 @@ namespace Reflection
                     //}
                     domainProp.SetValue(domain, modelProp.GetValue(model));
                 }
-
+                
             }
 
-
+           return domain;
         }
     }
 }

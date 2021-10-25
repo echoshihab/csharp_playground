@@ -25,9 +25,7 @@ namespace Reflection
                 }
             };
 
-            StudentDb studentDb = new StudentDb();
-
-            mapper.ModelToDomainMap<StudentDto, StudentDb>(studentDto);
+            StudentDb studentDb = mapper.ModelToDomainMap<StudentDto, StudentDb>(studentDto);
 
             var json = JsonSerializer.Serialize(studentDb);
 
