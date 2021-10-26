@@ -15,6 +15,8 @@ namespace Reflection
 
         public List<string> Courses { get; set; }
 
+        public string[] Clubs { get; set; }
+
         public Guid StudentGuid { get; set; } = new Guid();
     }
 
@@ -23,6 +25,8 @@ namespace Reflection
         public int StudentId { get; set; }
         public string StudentName { get; set; }
         public List<string> Courses { get; set; }
+
+        public IEnumerable<string> Clubs { get; set; }
 
     }
 
@@ -49,7 +53,6 @@ namespace Reflection
                     var domainPropType = domainProp.PropertyType;
                     var modelPropType = modelProp.PropertyType;
 
-                    Console.WriteLine(modelPropType);
                     if (domainPropType == modelPropType)
                     {
 

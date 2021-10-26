@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 
 namespace Reflection
@@ -22,6 +23,11 @@ namespace Reflection
                 Courses = new List<string>()
                 {
                     "Math", "Science"
+                },
+                Clubs = new []
+                {
+                    "Chess",
+                    "Jeopardy"
                 }
             };
 
