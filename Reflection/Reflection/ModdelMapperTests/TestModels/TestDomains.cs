@@ -14,7 +14,7 @@ namespace ModelMapperTests.TestModels
         public string[] Club { get; set; }
     }
 
-    public class TestDomainEnum
+    public class TestDomainEnumType
     {
         public List<int>  CourseNum { get; set; }
     }

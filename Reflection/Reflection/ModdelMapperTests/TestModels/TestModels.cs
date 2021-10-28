@@ -19,7 +19,7 @@ namespace ModelMapperTests.TestModels
     }
 
 
-    public class TestModelEnumSingleType
+    public class TestModelEnumType
     {
         public List<int>  CourseNum { get; set; }
 
