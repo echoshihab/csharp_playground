@@ -19,9 +19,9 @@ namespace ModelMapperTests.TestModels
         public List<int>  CourseNum { get; set; }
     }
 
-    public class TestDomainNullable
+    public class TestDomainNullableValueType
     {
-        public int? GenderId { get; set; }
+        public int? Id { get; set; }
     }
 
 

@@ -26,9 +26,9 @@ namespace ModelMapperTests.TestModels
     }
 
 
-    public class TestModelNullable
+    public class TestModelNullableValueType
     {
-        public int? GenderId { get; set; }
+        public int? Id { get; set; }
     }
 
     public class TestDictionaryModel

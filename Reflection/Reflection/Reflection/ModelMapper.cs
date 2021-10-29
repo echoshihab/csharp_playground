@@ -58,21 +58,32 @@ namespace Reflection
 
                         if (domainPropType.IsGenericType && modelPropType.IsGenericType)
                         {
-                            if (typeof(IEnumerable).IsAssignableFrom(domainPropType) &&
-                                typeof(IEnumerable).IsAssignableFrom(modelPropType) &&
-                                (modelPropType.GetGenericArguments()[0] == domainPropType.GetGenericArguments()[0])
+                            if ((modelPropType.GetGenericArguments()[0] == domainPropType.GetGenericArguments()[0])
                                 && (modelPropType.GetGenericTypeDefinition() == domainPropType.GetGenericTypeDefinition()))
                             {
-                                var listType = typeof(List<>);
-                                var constructed = listType.MakeGenericType(modelPropType.GetGenericArguments()[0]);
-                                var constructedInstance = (IList) Activator.CreateInstance(constructed);
-
-                                IEnumerable modelValues = (IEnumerable) modelProp.GetValue(model);
-                                foreach (var value in modelValues)
+                                //check for enum type
+                                if ((typeof(IEnumerable).IsAssignableFrom(domainPropType) &&
+                                     typeof(IEnumerable).IsAssignableFrom(modelPropType)))
                                 {
-                                    constructedInstance.Add(value);
+                                    var listType = typeof(List<>);
+                                    var constructed = listType.MakeGenericType(modelPropType.GetGenericArguments()[0]);
+                                    var constructedInstance = (IList) Activator.CreateInstance(constructed);
+
+                                    IEnumerable modelValues = (IEnumerable) modelProp.GetValue(model);
+                                    foreach (var value in modelValues)
+                                    {
+                                        constructedInstance.Add(value);
+                                    }
+                                    domainProp.SetValue(domain, constructedInstance);
                                 }
-                                domainProp.SetValue(domain, constructedInstance);
+
+                                //if not this is just generic type
+
+                                else
+                                {
+                                    domainProp.SetValue(domain, modelProp.GetValue(model));
+                                }
+                                
 
 
                             }
@@ -81,9 +92,23 @@ namespace Reflection
                                 throw new Exception("Type definition of Generic must be the same");
                             }
                         }
+                        //not generic type
+                        else
+                        {
+                            domainProp.SetValue(domain, modelProp.GetValue(model));
+                        }
 
                         
 
+                    }
+                    //check for model containing nullable property and domain does not but the types are equal
+                    else if (Nullable.GetUnderlyingType(modelPropType) != null && (modelProp.GetType() == domainProp.GetType()))
+                    {
+                        if (modelProp.GetValue(model) == null)
+                        {
+                            var zeroInstance = Activator.CreateInstance(domainPropType);
+                            domainProp.SetValue(domain, zeroInstance);
+                        }
                     }
 
 
@@ -95,7 +120,7 @@ namespace Reflection
 
 
                     //}
-                    domainProp.SetValue(domain, modelProp.GetValue(model));
+                   
                 }
                 
             }

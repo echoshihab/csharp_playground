@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ModelMapperTests.TestModels;
 using NUnit.Framework;
@@ -19,6 +20,11 @@ namespace ModelMapperTests
         private TestModelEnumType _testModelEnumType;
         
 
+        //nullable value type
+        private TestDomainNullableValueType _testDomainNullableValueType;
+        private TestModelNullableValueType _testModelNullableValueType;
+
+
         [SetUp]
         public void Setup()
         {
@@ -32,10 +38,19 @@ namespace ModelMapperTests
                 CourseNum = new List<int>()
                 {
                     1, 2, 3
-                }
+                },
+
             };
 
+            _testModelNullableValueType = new TestModelNullableValueType()
+            {
+                Id = null
+            };
+
+
+
             _mapper = new ModelMapper();
+
 
 
 
@@ -62,6 +77,19 @@ namespace ModelMapperTests
 
             Assert.IsTrue(_testDomainEnumType.CourseNum.Count == 3);
             Assert.IsTrue(_testDomainEnumType.CourseNum.Contains(3));
+
+        }
+
+        [Test]
+        public void ModelNullableValueTypeMaps_To_DomainNullableValueType()
+        {
+            _testDomainValueTypeNonNullable =
+                _mapper.ModelToDomainMap<TestModelNullableValueType, TestDomainValueTypeNonNullable>(
+                    _testModelNullableValueType);
+
+            Console.WriteLine(_testDomainValueTypeNonNullable.Id);
+            Assert.IsTrue(_testDomainValueTypeNonNullable.Id == default(int));
+
         }
 
     }
