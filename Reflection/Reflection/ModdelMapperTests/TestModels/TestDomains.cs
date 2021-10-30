@@ -25,7 +25,7 @@ namespace ModelMapperTests.TestModels
     }
 
 
-    public class TestDictionaryDomain
+    public class TestDictionaryDomainType
     {
         public Dictionary<int, string> IdCourse { get; set; }
     }

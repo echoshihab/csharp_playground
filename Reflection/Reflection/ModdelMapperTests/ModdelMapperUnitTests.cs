@@ -24,15 +24,22 @@ namespace ModelMapperTests
         private TestDomainNullableValueType _testDomainNullableValueType;
         private TestModelNullableValueType _testModelNullableValueType;
 
+        //dictioanry type
+        private TestDictionaryDomainType _testDictionaryDomainType;
+        private TestDictionaryModelType _testDictionaryModelType;
+
 
         [SetUp]
         public void Setup()
         {
+            //nullable model
             _testModelValueTypeNonNullable = new TestModelValueTypeNonNullable()
             {
                 Id = 1
             };
 
+
+            //enum type model
             _testModelEnumType = new TestModelEnumType()
             {
                 CourseNum = new List<int>()
@@ -42,17 +49,26 @@ namespace ModelMapperTests
 
             };
 
+            //nullable value type
             _testModelNullableValueType = new TestModelNullableValueType()
             {
                 Id = null
             };
 
 
+            //dictionary type
+            _testDictionaryModelType = new TestDictionaryModelType()
+            {
+                IdCourse = new Dictionary<int, string>()
+                {
+                    [1] = "test"
+                }
+            };
 
             _mapper = new ModelMapper();
 
 
-
+            
 
 
         }
@@ -87,8 +103,19 @@ namespace ModelMapperTests
                 _mapper.ModelToDomainMap<TestModelNullableValueType, TestDomainValueTypeNonNullable>(
                     _testModelNullableValueType);
 
-            Console.WriteLine(_testDomainValueTypeNonNullable.Id);
             Assert.IsTrue(_testDomainValueTypeNonNullable.Id == default(int));
+
+        }
+
+
+        [Test]
+        public void ModelDictionaryTypeMaps_To_DomainDictionaryType()
+        {
+            _testDictionaryDomainType = _mapper.ModelToDomainMap<TestDictionaryModelType, TestDictionaryDomainType>(
+                _testDictionaryModelType
+            );
+
+            Assert.IsTrue(_testDictionaryDomainType.IdCourse[1] == "test");
 
         }
 

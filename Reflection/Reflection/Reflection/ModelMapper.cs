@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
@@ -65,16 +66,42 @@ namespace Reflection
                                 if ((typeof(IEnumerable).IsAssignableFrom(domainPropType) &&
                                      typeof(IEnumerable).IsAssignableFrom(modelPropType)))
                                 {
-                                    var listType = typeof(List<>);
-                                    var constructed = listType.MakeGenericType(modelPropType.GetGenericArguments()[0]);
-                                    var constructedInstance = (IList) Activator.CreateInstance(constructed);
 
-                                    IEnumerable modelValues = (IEnumerable) modelProp.GetValue(model);
-                                    foreach (var value in modelValues)
+                                    //check for dictionary
+                                    if ((typeof(IDictionary).IsAssignableFrom(domainPropType) &&
+                                         typeof(IDictionary).IsAssignableFrom(modelPropType)))
                                     {
-                                        constructedInstance.Add(value);
+                                        var dictionaryType = typeof(Dictionary<,>);
+                                        var keyType = modelPropType.GetGenericArguments()[0];
+                                        var keyValueType = modelPropType.GetGenericArguments()[1];
+                                        
+                                        var constructedDict = dictionaryType.MakeGenericType(keyType, keyValueType);
+                                        var constructedDictInstance =
+                                            (IDictionary) Activator.CreateInstance(constructedDict);
+
+                                        IDictionary modelDict= (IDictionary) modelProp.GetValue(model);
+                                        foreach (var key in modelDict.Keys)
+                                        {
+                                            constructedDictInstance[key] = modelDict[key];
+                                        }
+                                        domainProp.SetValue(domain, constructedDictInstance);
                                     }
-                                    domainProp.SetValue(domain, constructedInstance);
+                                    //otherwise treat as regular enum type
+                                    else
+                                    {
+                                        
+                                        var listType = typeof(List<>);
+                                        var constructed = listType.MakeGenericType(modelPropType.GetGenericArguments()[0]);
+                                        var constructedInstance = (IList) Activator.CreateInstance(constructed);
+
+                                        IEnumerable modelValues = (IEnumerable) modelProp.GetValue(model);
+                                        foreach (var value in modelValues)
+                                        {
+                                            constructedInstance.Add(value);
+                                        }
+                                        domainProp.SetValue(domain, constructedInstance);
+                                    }
+
                                 }
 
                                 //if not this is just generic type
@@ -101,7 +128,7 @@ namespace Reflection
                         
 
                     }
-                    //check for model containing nullable property and domain does not but the types are equal
+                    //check types are same but model is nullable and domain is not
                     else if (Nullable.GetUnderlyingType(modelPropType) != null && (modelProp.GetType() == domainProp.GetType()))
                     {
                         if (modelProp.GetValue(model) == null)
@@ -111,21 +138,11 @@ namespace Reflection
                         }
                     }
 
-
-                    //if (Nullable.GetUnderlyingType(modelProp.PropertyType) != null &&
-                    //    Nullable.GetUnderlyingType(domainProp.PropertyType) == null)
-                    //{
-                    //    //meaning we have to cast before setting domain value
-
-
-
-                    //}
-                   
                 }
                 
             }
 
-           return domain;
+            return domain;
         }
     }
 }

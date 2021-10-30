@@ -31,10 +31,12 @@ namespace ModelMapperTests.TestModels
         public int? Id { get; set; }
     }
 
-    public class TestDictionaryModel
+    public class TestDictionaryModelType
     {
         public Dictionary<int, string> IdCourse { get; set; }
     }
+
+    
 
 
 
