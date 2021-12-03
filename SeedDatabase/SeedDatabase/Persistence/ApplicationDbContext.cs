@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SeedDatabase.Models;
 
-namespace SeedDatabase.Persistence.Migrations
+namespace SeedDatabase.Persistence
 {
     public class ApplicationDbContext : DbContext
     {
