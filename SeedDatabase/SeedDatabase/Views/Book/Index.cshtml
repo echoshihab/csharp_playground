@@ -1,7 +1,9 @@
-﻿@model IEnumerable<SeedDatabase.Models.Book>
+﻿@using System.Globalization
+@model IEnumerable<SeedDatabase.Models.Book>
 
 @{
     ViewData["Title"] = "Index";
+    var ti = CultureInfo.CurrentCulture.TextInfo;
 }
 
 <h1>Index</h1>
@@ -11,9 +13,6 @@
     <table class="table">
         <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -27,16 +26,13 @@
         @foreach (var item in Model) {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @ti.ToTitleCase(item.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Author.Name)
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.Id }) 
                 </td>
             </tr>
         }
