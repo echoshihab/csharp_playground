@@ -13,17 +13,16 @@ public class Patient
 {
     public string Name { get; set; }
     public int Id { get; set; }
-    public string HealthCard { get;set;}
-    public string VersionCode { get;set;}
+    public string HealthCard { get; set; }
+    public string VersionCode { get; set; }
 
 }
 
-
 public class Student
 {
-    public string ClassName { get;set;}
+    public string ClassName { get; set; }
 
-    public Guid StudentId { get;set;}
+    public Guid StudentId { get; set; }
 
 }
 
@@ -36,7 +35,7 @@ public class StudentDto
 }
 
 
-public class LamdbaExpressionConverter<TSource, TTarget>: ExpressionVisitor
+public class LamdbaExpressionConverter<TSource, TTarget> : ExpressionVisitor
 {
     private ReadOnlyCollection<ParameterExpression> _parameterExpressions;
 
@@ -55,7 +54,6 @@ public class LamdbaExpressionConverter<TSource, TTarget>: ExpressionVisitor
 
     protected override Expression VisitParameter(ParameterExpression node)
     {
-
         if (node.Type == typeof(TSource))
         {
 
@@ -70,17 +68,18 @@ public class LamdbaExpressionConverter<TSource, TTarget>: ExpressionVisitor
                 {
                     return node;
                 }
-            } else 
+            }
+            else
                 return parameterExpression;
 
         }
-      
+
         return base.VisitParameter(node);
     }
 
     protected override Expression VisitMember(MemberExpression node)
     {
-        if(node.Member.DeclaringType == typeof(TSource) && typeof(TTarget).GetProperty(node.Member.Name) != null)
+        if (node.Member.DeclaringType == typeof(TSource) && typeof(TTarget).GetProperty(node.Member.Name) != null)
         {
 
             return Expression.MakeMemberAccess(Visit(node.Expression), typeof(TTarget).GetProperty(node.Member.Name));
@@ -90,12 +89,10 @@ public class LamdbaExpressionConverter<TSource, TTarget>: ExpressionVisitor
 
 }
 
-
-    class Program
+class Program
 {
     static void Main(string[] args)
     {
-       
 
         List<Patient> patientsFromDb = new List<Patient>
         {
@@ -110,7 +107,6 @@ public class LamdbaExpressionConverter<TSource, TTarget>: ExpressionVisitor
                 Id= 5,
             }
         };
-
 
         List<Student> studentsFromDb = new List<Student>
         {
@@ -127,8 +123,6 @@ public class LamdbaExpressionConverter<TSource, TTarget>: ExpressionVisitor
 
         };
 
-
-
         Expression<Func<PatientDto, bool>> lambdaExpression = patient => patient.Id == 4 && patient.Name == "Magic";
 
         var modifiedExpression = new LamdbaExpressionConverter<PatientDto, Patient>().Convert(lambdaExpression);
@@ -138,7 +132,7 @@ public class LamdbaExpressionConverter<TSource, TTarget>: ExpressionVisitor
 
         Expression<Func<StudentDto, bool>> anotherLambdaExpression = student => student.ClassName == "Test";
 
-        var modifiedExpression2 =  new LamdbaExpressionConverter<StudentDto, Student>().Convert(anotherLambdaExpression);
+        var modifiedExpression2 = new LamdbaExpressionConverter<StudentDto, Student>().Convert(anotherLambdaExpression);
 
         var result2 = studentsFromDb.Where(modifiedExpression2.Compile()).FirstOrDefault().StudentId;
         Console.WriteLine(result2);
