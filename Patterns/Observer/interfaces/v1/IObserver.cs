@@ -1,4 +1,4 @@
-﻿namespace DesignPatterns.Observer.interfaces
+﻿namespace DesignPatterns.Observer.interfaces.v1
 {
     public interface IObserver
     {

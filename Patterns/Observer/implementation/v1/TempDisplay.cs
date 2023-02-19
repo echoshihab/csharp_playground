@@ -1,16 +1,17 @@
-﻿using DesignPatterns.Observer.interfaces;
+﻿using DesignPatterns.Observer.interfaces.v1;
 
-namespace DesignPatterns.Observer.implementation
+namespace DesignPatterns.Observer.implementation.v1
 {
     public class TempDisplay : IObserver, IDisplay
     {
         private int temp = 0;
         public void Display()
         {
-            if(temp >= 0)
+            if (temp >= 0)
             {
                 Console.WriteLine("Warmer Temperature");
-            } else
+            }
+            else
             {
                 Console.WriteLine("Cooler Temperature");
             }
@@ -23,7 +24,7 @@ namespace DesignPatterns.Observer.implementation
             _ = pressure;
 
             Display();
-             
+
         }
     }
 }

@@ -1,18 +1,18 @@
 ﻿using DesignPatterns.Observer.interfaces;
 
-public class WeatherDataSubject
+public class WeatherDataSubjectV2 : IObservable
 {
 
     private int temp;
     private int humidity;
     private int pressure;
     private Random randomInstance;
-	private IList<IObserver> observers;
+	private IList<IObserverV2> observers;
 
-    public WeatherDataSubject()
+    public WeatherDataSubjectV2()
 	{
 		this.randomInstance = new Random();
-		this.observers = new List<IObserver>();
+		this.observers = new List<IObserverV2>();
 	}
 
 	public void measurementChanged()
@@ -21,38 +21,38 @@ public class WeatherDataSubject
 		this.pressure = getPressure();
         this.temp = getTemperature();
 
-		NotifyObserver();
+		NotifyObservers();
 	}
 
-	private void NotifyObserver()
+	public void NotifyObservers()
 	{
 		foreach(var observer in observers)
 		{
-			observer.update(this.temp, this.humidity, this.pressure);
+			observer.update(this);
 		}
 	}
 
-	public void RegisterObserver(IObserver observer)
+	public void RegisterObserver(IObserverV2 observer)
 	{
 		this.observers.Add(observer);
 	}
 
-	public void RemoveObserver(IObserver observer)
+	public void RemoveObserver(IObserverV2 observer)
 	{
 		this.observers.Remove(observer);
 	}
 
-	private int getTemperature()
+	public int getTemperature()
 	{
 		return this.randomInstance.Next(-10, 10);
 	}
 
-	private int getHumidity()
+    public int getHumidity()
 	{
 		return this.randomInstance.Next(11, 21);
     }
 
-	private int getPressure()
+    public int getPressure()
 	{
         return this.randomInstance.Next(21, 31);
     }
