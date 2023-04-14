@@ -1,74 +1,33 @@
-﻿// See https://aka.ms/new-console-template for more information
-using DesignPatterns.Observer.implementation;
-using DesignPatterns.Observer.implementation.v1;
+﻿using DesignPatterns.Observer;
 
+Console.WriteLine(@"Enter a number to display a specific pattern demo:
+1  - Observer Implementation (Push)
+2  - Observer Implementation (Pull)
+3  - Decorator Implementation
+"
+);
 
-// V1 implementation (push)
-//Console.WriteLine("Hello, World!");
+var validInput = int.TryParse(Console.ReadLine(), out int result);
 
-
-//var weatherData = new WeatherDataSubject();
-//var currentWeatherDisplay =  new CurrentWeatherDisplay();
-//var tempDisplay = new TempDisplay();
-//int timerCounter = 0;
-//int removeObserverCount = 0;
-
-//weatherData.RegisterObserver(currentWeatherDisplay);
-//weatherData.RegisterObserver(tempDisplay);
-
-//var timer = new System.Timers.Timer();
-//timer.Interval = 2000;
-//timer.Start();
-//timer.Elapsed += delegate(Object source, System.Timers.ElapsedEventArgs e)
-//{
-
-//    if(++timerCounter > 2 && removeObserverCount == 0)
-//    {
-//        Console.WriteLine("Removing Temp Observer");
-//        weatherData.RemoveObserver(tempDisplay);
-//        removeObserverCount++;
-//    };
-
-//    if(++timerCounter > 4)
-//    {
-//        timer.Stop();
-        
-//    }
-//    weatherData.measurementChanged();
-//};
-
-// v2 implementation (pull)
-var weatherData = new WeatherDataSubjectV2();
-var currentWeatherDisplay = new CurrentWeatherDisplayV2(weatherData);
-var tempDisplay = new TempDisplayV2(weatherData);
-int timerCounter = 0;
-int removeObserverCount = 0;
-
-
-var timer = new System.Timers.Timer();
-timer.Interval = 2000;
-timer.Start();
-timer.Elapsed += delegate (Object source, System.Timers.ElapsedEventArgs e)
+if (!validInput)
 {
-
-    if (++timerCounter > 2 && removeObserverCount == 0)
+    Console.WriteLine("Input is invalid");
+} 
+else
+{
+    switch (result)
     {
-        Console.WriteLine("Removing Temp Observer");
-        weatherData.RemoveObserver(tempDisplay);
-        removeObserverCount++;
-    };
-
-    if (++timerCounter > 4)
-    {
-        timer.Stop();
-
-    }
-    weatherData.measurementChanged();
-};
-
-
-Console.WriteLine("Press the Enter key to exit the program at any time... ");
-Console.ReadLine();
+        case 1:
+            ObserverDemo.ObserverPushImplementation();
+            break;
+        case 2:
+            ObserverDemo.ObserverPullImplementation();
+            break;
+        default:
+            Console.WriteLine("Invalid Entry");
+            break;
+    }        
+}
 
 
 
