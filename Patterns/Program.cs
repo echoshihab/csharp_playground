@@ -1,10 +1,13 @@
 ﻿using DesignPatterns.Decorator.Starbuzz;
+using DesignPatterns.Factory;
+using DesignPatterns.Factory.SimpleFactory;
 using DesignPatterns.Observer;
 
 Console.WriteLine(@"Enter a number to display a specific pattern demo:
 1  - Observer Implementation (Push)
 2  - Observer Implementation (Pull)
 3  - Decorator Implementation
+4  - Simple Factory Implementation
 "
 );
 
@@ -26,6 +29,9 @@ else
             break;
         case 3:
             DecoratorDemo.StarbuzzCoffeeDecoratorDemo();
+            break;
+        case 4:
+            FactoryPattern.SimpleFactoryDemo();
             break;
         default:
             Console.WriteLine("Invalid Entry");
